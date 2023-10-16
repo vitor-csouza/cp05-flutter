@@ -1,0 +1,19 @@
+create table
+  planejamento_mensal (
+    id bigint generated always as identity primary key,
+    user_id text not null,
+    mes text not null,
+    ano text not null,
+    receita_mensal numeric not null,
+    meta_economia numeric not null,
+    ativo boolean default false
+  );
+
+create table
+  despesa_planejada (
+    id bigint generated always as identity primary key,
+    descricao text not null,
+    planejamento_id bigint references planejamento_mensal (id),
+    categoria_id bigint references categorias (id),
+    valor numeric not null
+  );

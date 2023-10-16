@@ -6,6 +6,7 @@ class AuthRepository {
     await supabase.auth.signInWithPassword(password: senha, email: email);
   }
 
+
   Future registrar(String email, String senha) async {
     final supabase = Supabase.instance.client;
     await supabase.auth.signUp(password: senha, email: email);

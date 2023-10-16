@@ -39,6 +39,7 @@ dependencies:
   flutter_masked_text2: ^0.9.1
   supabase_flutter: ^1.10.19
   flutter_slidable: ^3.0.0
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
