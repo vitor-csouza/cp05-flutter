@@ -24,6 +24,21 @@ class DespesaPlanejadaRepository {
     return list;
   }
 
+  Future<List<DespesaPlanejada>> getDespesasPorPlanejamento(
+      int planejamentoId) async {
+    final supabase = Supabase.instance.client;
+
+    final data = await supabase
+        .from('despesa_planejada')
+        .select()
+        .eq('planejamento_id', planejamentoId);
+    final list = data.data as List;
+
+    return list.map((map) {
+      return DespesaPlanejada.fromMap(map);
+    }).toList();
+  }
+
   Future cadastrar(DespesaPlanejada despesa) async {
     final supabase = Supabase.instance.client;
 

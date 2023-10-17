@@ -21,12 +21,15 @@ class _PlanejamentoDetalhePageState extends State<PlanejamentoDetalhePage> {
 
   late Future<List<DespesaPlanejada>> futureDespesas;
 
-  double? valorRestante;
   late PlanejamentoMensal planejamento;
+
+  late List<DespesaPlanejada> despesasCarregadas;
 
   @override
   void initState() {
     futureDespesas = repository.listar();
+    carregarDespesas();
+
     super.initState();
   }
 
@@ -34,6 +37,9 @@ class _PlanejamentoDetalhePageState extends State<PlanejamentoDetalhePage> {
   Widget build(BuildContext context) {
     planejamento =
         ModalRoute.of(context)!.settings.arguments as PlanejamentoMensal;
+    planejamento.despesas = despesasCarregadas
+        .where((despesa) => despesa.planejamento.id == planejamento.id)
+        .toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -50,7 +56,7 @@ class _PlanejamentoDetalhePageState extends State<PlanejamentoDetalhePage> {
         children: [
           const SizedBox(height: 16),
           const Text(
-            'Receita Mensal',
+            'Meta de economia:',
             style: TextStyle(
               fontSize: 20,
             ),
@@ -59,7 +65,7 @@ class _PlanejamentoDetalhePageState extends State<PlanejamentoDetalhePage> {
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Text(
               NumberFormat.simpleCurrency(locale: 'pt_BR')
-                  .format(planejamento.receitaMensal),
+                  .format(planejamento.metaEconomia),
               style: const TextStyle(
                 fontSize: 28,
               ),
@@ -78,9 +84,9 @@ class _PlanejamentoDetalhePageState extends State<PlanejamentoDetalhePage> {
               ),
               Expanded(
                 child: MyCard(
-                  title: 'Economia',
+                  title: 'Gastos',
                   value: NumberFormat.simpleCurrency(locale: 'pt_BR')
-                      .format(planejamento.metaEconomia),
+                      .format(_calcularTotalGasto(planejamento)),
                 ),
               ),
               Expanded(
@@ -132,12 +138,6 @@ class _PlanejamentoDetalhePageState extends State<PlanejamentoDetalhePage> {
                       child: Text("Nenhuma despesa Planejada cadastrada"),
                     );
                   } else {
-                    final allDespesas = snapshot.data!;
-                    planejamento.despesas = allDespesas
-                        .where((despesa) =>
-                            despesa.planejamento.id == planejamento.id)
-                        .toList();
-
                     return ListView.separated(
                       itemCount: planejamento.despesas.length,
                       itemBuilder: (context, index) {
@@ -201,6 +201,28 @@ class _PlanejamentoDetalhePageState extends State<PlanejamentoDetalhePage> {
     );
   }
 
+  double _calcularTotalGasto(PlanejamentoMensal planejamento) {
+    double totalGasto = 0;
+    List<DespesaPlanejada> despesas = planejamento.despesas;
+
+    for (var despesa in despesas) {
+      totalGasto += despesa.valor;
+    }
+
+    return totalGasto;
+  }
+
+  Future<void> carregarDespesas() async {
+    try {
+      List<DespesaPlanejada> lista = await futureDespesas;
+      setState(() {
+        despesasCarregadas = lista;
+      });
+    } catch (e) {
+      print('Erro ao carregar as despesas: $e');
+    }
+  }
+
   double _calcularDinheiroRestante(PlanejamentoMensal planejamento) {
     double totalGasto = 0;
     List<DespesaPlanejada> despesas = planejamento.despesas;
@@ -209,17 +231,13 @@ class _PlanejamentoDetalhePageState extends State<PlanejamentoDetalhePage> {
       totalGasto += despesa.valor;
     }
 
-    print(despesas);
-
-    double dinheiroRestante =
-        planejamento.receitaMensal - totalGasto;
-    return dinheiroRestante;
+    return planejamento.receitaMensal - totalGasto;
   }
 
-  bool _verificarMeta(PlanejamentoMensal planejamento, double valor){
-    if(planejamento.metaEconomia>valor){
+  bool _verificarMeta(PlanejamentoMensal planejamento, double valor) {
+    if (planejamento.metaEconomia > valor) {
       return true;
-    } 
+    }
     return false;
   }
 }
