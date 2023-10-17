@@ -13,7 +13,6 @@ class PlanejamentoItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: const CircleAvatar(),
       title: Text(planejamento.mes),
       subtitle: Text(planejamento.ano),
       trailing: Text(

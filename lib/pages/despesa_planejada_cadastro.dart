@@ -127,6 +127,8 @@ class _DespesaPlanejadaCadastroPageState
             .parse(valorController.text.replaceAll('R\$', ''));
         if (valor <= 0) {
           return 'Informe um valor maior que zero';
+        } else if(valor >= (planejamento!.receitaMensal)){
+          return 'Não pode ser maior que sua receita!';
         }
         return null;
       },

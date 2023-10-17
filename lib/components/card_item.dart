@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 class MyCard extends StatelessWidget {
   final String title;
-  final double value;
+  final String value;
 
   MyCard({required this.title, required this.value});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 4, // Sombra do card
-      margin: EdgeInsets.all(16), // Margem em torno do card
+      elevation: 4, 
+      margin: EdgeInsets.all(16), 
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -18,15 +18,15 @@ class MyCard extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 10), // Espaço entre o título e o valor
+            SizedBox(height: 10),
             Text(
               value.toString(),
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16,
               ),
             ),
           ],

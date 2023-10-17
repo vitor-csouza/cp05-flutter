@@ -6,6 +6,7 @@ import 'package:expense_tracker/pages/despesa_planejada_cadastro.dart';
 import 'package:expense_tracker/repository/despesa_planejada_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 
 class PlanejamentoDetalhePage extends StatefulWidget {
   const PlanejamentoDetalhePage({super.key});
@@ -36,46 +37,83 @@ class _PlanejamentoDetalhePageState extends State<PlanejamentoDetalhePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${planejamento.mes} - ${planejamento.ano}'),
+        backgroundColor: Colors.blueAccent,
+        title: Text(
+          '${planejamento.mes} - ${planejamento.ano}',
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Receita Mensal
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Receita Mensal: \$${planejamento.receitaMensal.toStringAsFixed(2)}',
-              style: const TextStyle(fontSize: 20),
+          const SizedBox(height: 16),
+          const Text(
+            'Receita Mensal',
+            style: TextStyle(
+              fontSize: 20,
             ),
           ),
-
-          // Cards para Meta de Economia e Total Gasto
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(
+              NumberFormat.simpleCurrency(locale: 'pt_BR')
+                  .format(planejamento.receitaMensal),
+              style: const TextStyle(
+                fontSize: 28,
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Expanded(
                 child: MyCard(
-                    title: 'Meta mensal', value: planejamento.receitaMensal),
+                  title: 'Receita',
+                  value: NumberFormat.simpleCurrency(locale: 'pt_BR')
+                      .format(planejamento.receitaMensal),
+                ),
               ),
               Expanded(
                 child: MyCard(
-                    title: 'Meta Economia', value: planejamento.metaEconomia),
+                  title: 'Economia',
+                  value: NumberFormat.simpleCurrency(locale: 'pt_BR')
+                      .format(planejamento.metaEconomia),
+                ),
               ),
               Expanded(
                 child: MyCard(
-                    title: 'Restante',
-                    value: _calcularDinheiroRestante(planejamento)),
+                  title: 'Restante',
+                  value: NumberFormat.simpleCurrency(locale: 'pt_BR')
+                      .format(_calcularDinheiroRestante(planejamento)),
+                ),
               ),
             ],
           ),
+          const SizedBox(height: 16),
           ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.lightBlue),
+                padding: MaterialStateProperty.all(
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12)),
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ))),
             onPressed: () {
               Navigator.pushNamed(context, '/despesa-cadastro',
                   arguments: planejamento);
             },
-            child: const Text('Adicionar Despesa Planejada'),
+            child: const Text(
+              'Adicionar Despesa Planejada',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+              ),
+            ),
           ),
+          const SizedBox(height: 16),
           Expanded(
             child: FutureBuilder<List<DespesaPlanejada>>(
                 future: futureDespesas,
@@ -171,7 +209,8 @@ class _PlanejamentoDetalhePageState extends State<PlanejamentoDetalhePage> {
       totalGasto += despesa.valor;
     }
 
-    // Calcula o dinheiro restante
+    print(despesas);
+
     double dinheiroRestante =
         planejamento.receitaMensal - (planejamento.metaEconomia + totalGasto);
     return dinheiroRestante;

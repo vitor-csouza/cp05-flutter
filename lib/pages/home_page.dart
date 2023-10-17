@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
       BottomNavigationBarItem(
           icon: Icon(Ionicons.wallet_outline), label: 'Contas'),
       BottomNavigationBarItem(
-          icon: Icon(Ionicons.calendar_clear_outline), label: 'Planejamento'),
+          icon: Icon(Ionicons.calendar_outline), label: 'Planejamento'),
       BottomNavigationBarItem(
           icon: Icon(Ionicons.list_outline), label: 'Caegorias'),
     ];

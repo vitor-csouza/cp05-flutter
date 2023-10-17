@@ -13,9 +13,7 @@ class PlanejamentoMensalRepository {
           .eq('user_id', userId);
 
       final planejamentos =
-          data.map((e) => PlanejamentoMensal.fromMap(e)).toList();
-
-      
+          data.map((e) => PlanejamentoMensal.fromMap(e)).toList();      
 
       return planejamentos;
     } catch (error) {
