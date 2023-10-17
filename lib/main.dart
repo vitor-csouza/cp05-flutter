@@ -15,13 +15,13 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
-  await dotenv.load(fileName: '.env');
-  String supabaseUrl = dotenv.env['SUPABASE_URL'] ?? '';
-  String supabaseApiKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
+  await dotenv.load(fileName: ".env");
+  String supabaseUrl = dotenv.get('SUPABASE_URL');
+  String supabaseApiKey = dotenv.get('SUPABASE_ANON_KEY');
 
   await Supabase.initialize(
-    url: "https://fcseeomnmforgfufecuz.supabase.co",
-    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZjc2Vlb21ubWZvcmdmdWZlY3V6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTY5MzkwOTQsImV4cCI6MjAxMjUxNTA5NH0.Ws3wgZ2OP_tNT8dbqHuXV1xvxk5aw-dE--0ynoXspXE",
+    url: supabaseUrl,
+    anonKey: supabaseApiKey,
   );
   runApp(const MyApp());
 }
