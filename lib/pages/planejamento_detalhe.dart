@@ -212,7 +212,14 @@ class _PlanejamentoDetalhePageState extends State<PlanejamentoDetalhePage> {
     print(despesas);
 
     double dinheiroRestante =
-        planejamento.receitaMensal - (planejamento.metaEconomia + totalGasto);
+        planejamento.receitaMensal - totalGasto;
     return dinheiroRestante;
+  }
+
+  bool _verificarMeta(PlanejamentoMensal planejamento, double valor){
+    if(planejamento.metaEconomia>valor){
+      return true;
+    } 
+    return false;
   }
 }
